@@ -12,66 +12,248 @@
   },
   "validators": [
     {
-      "title": "hello_world.hello_world.spend",
+      "title": "staking.staking.spend",
       "datum": {
         "title": "datum",
         "schema": {
-          "$ref": "#/definitions/hello_world~1Datum"
+          "$ref": "#/definitions/staking~1Datum"
         }
       },
       "redeemer": {
         "title": "redeemer",
         "schema": {
-          "$ref": "#/definitions/hello_world~1Redeemer"
+          "$ref": "#/definitions/staking~1Redeemer"
         }
       },
-      "compiledCode": "59010301010032323232323225333002323232323253330073370e900118041baa0011323232533300a3370e900018059baa00513232533300f30110021533300c3370e900018069baa003132533300d3371e6eb8c044c03cdd50042450d48656c6c6f2c20576f726c642100100114a06644646600200200644a66602600229404c94ccc044cdc79bae301500200414a2266006006002602a0026eb0c040c044c044c044c044c044c044c044c044c038dd50049bae3010300e37546020601c6ea800c5858dd7180780098061baa00516300d300e002300c001300937540022c6014601600460120026012004600e00260086ea8004526136565734aae7555cf2ab9f5742ae89",
-      "hash": "fdd6640d1c9a4392dd7e829f0cc4e26766539c48b2cf594959e33559"
+      "parameters": [
+        {
+          "title": "pool_policy_id",
+          "schema": {
+            "$ref": "#/definitions/PolicyId"
+          }
+        },
+        {
+          "title": "pool_asset_name",
+          "schema": {
+            "$ref": "#/definitions/AssetName"
+          }
+        }
+      ],
+      "compiledCode": "5903b60101003232323232323223223225333006323232323253323300c3001300d3754004264646464646464a66602660080022a66602c602a6ea8028540085854ccc04cc02000454ccc058c054dd50050a8010b0a99980998018008a99980b180a9baa00a1500216153330133370e90030008a99980b180a9baa00a1500216153330133370e90040008a99980b180a9baa00a1500216153330133370e90050008a99980b180a9baa00a1500216153330133370e90060008a99980b180a9baa00a1500216163013375401226464646464646464a66603260140022a666032601460346ea802c4c94ccc068c02cc06cdd500089919299980e1806980e9baa001132533301d300d301e3754002264a66603c601e603e6ea80044c8c94ccc08cc09800854ccc080c044c084dd500089919299981298140010a999811180998119baa001132325333027302a002132330010010022232533302a00213375e01a00c2646464646464a66606060660042600e60660102c6eb8c0c4004c0c4008dd718178009bac302b002375c6052002605800460040042c6eacc0a0004c090dd50008b0b181300098111baa00116163024001302037540022c6044603e6ea800458c084c088c088c078dd51810980f1baa00116323300100100822533302000114c103d87a800013232533233020323230173253330233018302437540022900009bad30283025375400264a666046603060486ea80045300103d87a80001323300100137566052604c6ea8008894ccc0a0004530103d87a800013232323253330293372204a0042a66605266e3c0940084c028cc0b4dd4000a5eb80530103d87a8000133006006003375a60540066eb8c0a0008c0b0008c0a8004c8cc004004dd5981418148019129998138008a6103d87a800013232323253330283372204c0042a66605066e3c0980084c024cc0b0dd3000a5eb80530103d87a8000133006006003375660520066eb8c09c008c0ac008c0a4004c098004c088dd50018980099812001a5eb80dd2a400026600800800260480046044002603e60386ea800458c078c06cdd50058b0a99980c98070008b0a99980c98048008b0a99980c99b87480180045854ccc064cdc3a40100022c2a66603266e1d200a00116163019375401e6eb0c070c074c074008dd5980d800980d980d980d980d8011bac3019001301930190023758602e00260266ea8028dc3a40086e1d2000301330140023012001300e37540046e1d200216300f3010002300e001300e002300c0013008375400229309b2b1bae001375c002ae6955ceaab9e5573eae815d0aba201",
+      "hash": "e06f8483782bbf52f0642d72b1b8579afa5676f644d148199ad214a7"
     },
     {
-      "title": "hello_world.hello_world.else",
+      "title": "staking.staking.else",
       "redeemer": {
         "schema": {}
       },
-      "compiledCode": "59010301010032323232323225333002323232323253330073370e900118041baa0011323232533300a3370e900018059baa00513232533300f30110021533300c3370e900018069baa003132533300d3371e6eb8c044c03cdd50042450d48656c6c6f2c20576f726c642100100114a06644646600200200644a66602600229404c94ccc044cdc79bae301500200414a2266006006002602a0026eb0c040c044c044c044c044c044c044c044c044c038dd50049bae3010300e37546020601c6ea800c5858dd7180780098061baa00516300d300e002300c001300937540022c6014601600460120026012004600e00260086ea8004526136565734aae7555cf2ab9f5742ae89",
-      "hash": "fdd6640d1c9a4392dd7e829f0cc4e26766539c48b2cf594959e33559"
+      "parameters": [
+        {
+          "title": "pool_policy_id",
+          "schema": {
+            "$ref": "#/definitions/PolicyId"
+          }
+        },
+        {
+          "title": "pool_asset_name",
+          "schema": {
+            "$ref": "#/definitions/AssetName"
+          }
+        }
+      ],
+      "compiledCode": "5903b60101003232323232323223223225333006323232323253323300c3001300d3754004264646464646464a66602660080022a66602c602a6ea8028540085854ccc04cc02000454ccc058c054dd50050a8010b0a99980998018008a99980b180a9baa00a1500216153330133370e90030008a99980b180a9baa00a1500216153330133370e90040008a99980b180a9baa00a1500216153330133370e90050008a99980b180a9baa00a1500216153330133370e90060008a99980b180a9baa00a1500216163013375401226464646464646464a66603260140022a666032601460346ea802c4c94ccc068c02cc06cdd500089919299980e1806980e9baa001132533301d300d301e3754002264a66603c601e603e6ea80044c8c94ccc08cc09800854ccc080c044c084dd500089919299981298140010a999811180998119baa001132325333027302a002132330010010022232533302a00213375e01a00c2646464646464a66606060660042600e60660102c6eb8c0c4004c0c4008dd718178009bac302b002375c6052002605800460040042c6eacc0a0004c090dd50008b0b181300098111baa00116163024001302037540022c6044603e6ea800458c084c088c088c078dd51810980f1baa00116323300100100822533302000114c103d87a800013232533233020323230173253330233018302437540022900009bad30283025375400264a666046603060486ea80045300103d87a80001323300100137566052604c6ea8008894ccc0a0004530103d87a800013232323253330293372204a0042a66605266e3c0940084c028cc0b4dd4000a5eb80530103d87a8000133006006003375a60540066eb8c0a0008c0b0008c0a8004c8cc004004dd5981418148019129998138008a6103d87a800013232323253330283372204c0042a66605066e3c0980084c024cc0b0dd3000a5eb80530103d87a8000133006006003375660520066eb8c09c008c0ac008c0a4004c098004c088dd50018980099812001a5eb80dd2a400026600800800260480046044002603e60386ea800458c078c06cdd50058b0a99980c98070008b0a99980c98048008b0a99980c99b87480180045854ccc064cdc3a40100022c2a66603266e1d200a00116163019375401e6eb0c070c074c074008dd5980d800980d980d980d980d8011bac3019001301930190023758602e00260266ea8028dc3a40086e1d2000301330140023012001300e37540046e1d200216300f3010002300e001300e002300c0013008375400229309b2b1bae001375c002ae6955ceaab9e5573eae815d0aba201",
+      "hash": "e06f8483782bbf52f0642d72b1b8579afa5676f644d148199ad214a7"
     }
   ],
   "definitions": {
-    "ByteArray": {
+    "AssetClass": {
+      "title": "AssetClass",
+      "dataType": "list",
+      "items": [
+        {
+          "$ref": "#/definitions/PolicyId"
+        },
+        {
+          "$ref": "#/definitions/AssetName"
+        }
+      ]
+    },
+    "AssetName": {
+      "title": "AssetName",
       "dataType": "bytes"
+    },
+    "Int": {
+      "dataType": "integer"
+    },
+    "List$Pair$VerificationKeyHash_AssetClass": {
+      "dataType": "map",
+      "keys": {
+        "$ref": "#/definitions/VerificationKeyHash"
+      },
+      "values": {
+        "$ref": "#/definitions/AssetClass"
+      }
+    },
+    "List$Tuple$Int_POSIXTime": {
+      "dataType": "list",
+      "items": {
+        "$ref": "#/definitions/Tuple$Int_POSIXTime"
+      }
+    },
+    "Option$POSIXTime": {
+      "title": "Option",
+      "anyOf": [
+        {
+          "title": "Some",
+          "description": "An optional value.",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/POSIXTime"
+            }
+          ]
+        },
+        {
+          "title": "None",
+          "description": "Nothing.",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": []
+        }
+      ]
+    },
+    "POSIXTime": {
+      "title": "POSIXTime",
+      "dataType": "integer"
+    },
+    "PolicyId": {
+      "title": "PolicyId",
+      "dataType": "bytes"
+    },
+    "Tuple$Int_POSIXTime": {
+      "title": "Tuple",
+      "dataType": "list",
+      "items": [
+        {
+          "$ref": "#/definitions/Int"
+        },
+        {
+          "$ref": "#/definitions/POSIXTime"
+        }
+      ]
     },
     "VerificationKeyHash": {
       "title": "VerificationKeyHash",
       "dataType": "bytes"
     },
-    "hello_world/Datum": {
+    "staking/Datum": {
       "title": "Datum",
       "anyOf": [
         {
-          "title": "Datum",
+          "title": "PoolDatum",
           "dataType": "constructor",
           "index": 0,
           "fields": [
             {
-              "title": "owner",
-              "$ref": "#/definitions/VerificationKeyHash"
+              "$ref": "#/definitions/staking~1PoolDatumType"
+            }
+          ]
+        },
+        {
+          "title": "UserDatum",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/staking~1UserDatumType"
             }
           ]
         }
       ]
     },
-    "hello_world/Redeemer": {
-      "title": "Redeemer",
+    "staking/PoolDatumType": {
+      "title": "PoolDatumType",
       "anyOf": [
         {
-          "title": "Redeemer",
+          "title": "PoolDatumType",
           "dataType": "constructor",
           "index": 0,
           "fields": [
             {
-              "title": "msg",
-              "$ref": "#/definitions/ByteArray"
+              "title": "activeUsers",
+              "$ref": "#/definitions/List$Pair$VerificationKeyHash_AssetClass"
+            }
+          ]
+        }
+      ]
+    },
+    "staking/Redeemer": {
+      "title": "Redeemer",
+      "anyOf": [
+        {
+          "title": "FEED",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": []
+        },
+        {
+          "title": "DEPOSIT",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": []
+        },
+        {
+          "title": "WITHDRAW",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": []
+        },
+        {
+          "title": "REGISTER",
+          "dataType": "constructor",
+          "index": 3,
+          "fields": []
+        },
+        {
+          "title": "UNREGISTER",
+          "dataType": "constructor",
+          "index": 4,
+          "fields": []
+        },
+        {
+          "title": "CLAIM",
+          "dataType": "constructor",
+          "index": 5,
+          "fields": []
+        },
+        {
+          "title": "COMPOUND",
+          "dataType": "constructor",
+          "index": 6,
+          "fields": []
+        }
+      ]
+    },
+    "staking/UserDatumType": {
+      "title": "UserDatumType",
+      "anyOf": [
+        {
+          "title": "UserDatumType",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "user",
+              "$ref": "#/definitions/VerificationKeyHash"
+            },
+            {
+              "title": "deposits",
+              "$ref": "#/definitions/List$Tuple$Int_POSIXTime"
+            },
+            {
+              "title": "lastClaim",
+              "$ref": "#/definitions/Option$POSIXTime"
             }
           ]
         }
