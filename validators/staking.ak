@@ -30,7 +30,7 @@ pub type Datum {
 
 pub type Redeemer {
   FEED
-  DEPOSIT
+  DEPOSIT(Int, POSIXTime)
   WITHDRAW
   REGISTER(VerificationKeyHash, AssetClass)
   UNREGISTER(VerificationKeyHash)
@@ -49,15 +49,26 @@ pub fn get_payment_cred(address: Address) -> ByteArray {
   }
 }
 
-validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
+validator staking(
+  pool_nft_policy_id: PolicyId,
+  pool_nft_asset_name: AssetName,
+  main_token_policy_id: PolicyId,
+  main_token_asset_name: AssetName,
+) {
   spend(
     datum: Option<Datum>,
     redeemer: Redeemer,
     _own_ref: OutputReference,
     self: Transaction,
   ) {
-    let Transaction { inputs, withdrawals, extra_signatories, outputs, .. } =
-      self
+    let Transaction {
+      inputs,
+      reference_inputs,
+      withdrawals,
+      extra_signatories,
+      outputs,
+      ..
+    } = self
 
     when redeemer is {
       // Validation for Feed action when the Pool utxo is spent.
@@ -73,7 +84,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             fn(
               Input { output: Output { address: pool_addr, value: v, .. }, .. },
             ) {
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1
             },
           )
         expect Some(input) = main_input
@@ -84,7 +95,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             outputs,
             fn(Output { address: addr, value: v, .. }) {
               // check NFT and output addr
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1 && addr == own_script_addr
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1 && addr == own_script_addr
             },
           )
         expect Some(output) = main_output
@@ -109,7 +120,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             fn(
               Input { output: Output { address: pool_addr, value: v, .. }, .. },
             ) {
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1
             },
           )
         expect Some(input) = main_input
@@ -123,7 +134,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             outputs,
             fn(Output { address: addr, value: v, .. }) {
               // check NFT and output addr
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1 && addr == own_script_addr
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1 && addr == own_script_addr
             },
           )
         expect Some(output) = main_output
@@ -158,7 +169,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             fn(
               Input { output: Output { address: pool_addr, value: v, .. }, .. },
             ) {
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1
             },
           )
         expect Some(input) = main_input
@@ -171,7 +182,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
             outputs,
             fn(Output { address: addr, value: v, .. }) {
               // check NFT and output addr
-              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1 && addr == own_script_addr
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1 && addr == own_script_addr
             },
           )
         expect Some(output) = main_output
@@ -189,7 +200,48 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
       //   * the value blocked in the utxo coincides with the expected one,
       //   * the tokens in concept of fees are distributed properly,
       //   * the output user state is the expected one.
-      DEPOSIT -> todo
+      DEPOSIT(amt, time) -> {
+        expect Some(owner) = list.last(extra_signatories)
+        let main_pool_input =
+          list.find(
+            reference_inputs,
+            fn(
+              Input { output: Output { address: pool_addr, value: v, .. }, .. },
+            ) {
+              assets.quantity_of(v, pool_nft_policy_id, pool_nft_asset_name) == 1
+            },
+          )
+        expect Some(pool_input) = main_pool_input
+        expect InlineDatum(pool_datum_data) = pool_input.output.datum
+        expect PoolDatum(pool_datum) = pool_datum_data
+        let user_nft_option = pairs.get_first(pool_datum.active_users, owner)
+        expect Some((user_nft_policy_id, user_nft_asset_name)) = user_nft_option
+        let main_input =
+          list.find(
+            inputs,
+            fn(
+              Input { output: Output { address: pool_addr, value: v, .. }, .. },
+            ) {
+              assets.quantity_of(v, user_nft_policy_id, user_nft_asset_name) == 1
+            },
+          )
+        expect Some(input) = main_input
+        expect InlineDatum(user_datum_data) = input.output.datum
+        expect UserDatum(user_datum) = user_datum_data
+        expect owner == user_datum.user
+        let main_output =
+          list.find(
+            outputs,
+            fn(Output { address: pool_addr, value: v, .. }) {
+              assets.quantity_of(v, user_nft_policy_id, user_nft_asset_name) == 1
+            },
+          )
+        expect Some(output) = main_output
+        expect InlineDatum(new_datum) = output.datum
+        expect Some(UserDatum(new_user_datum)) = new_datum
+        // pool datum is not changed
+        list.push(user_datum.deposits, (amt, time)) == new_user_datum.deposits && user_datum.user == new_user_datum.user && user_datum.last_claim == new_user_datum.last_claim
+      }
       // Validation for Withdraw action when the User utxo is spent.
       // We must check that:
       //   * the transaction is signed by the pub key specified in the user state,
