@@ -20,7 +20,7 @@ pub type PoolDatumType {
 pub type UserDatumType {
   user: VerificationKeyHash,
   deposits: List<(Int, POSIXTime)>,
-  lastClaim: Option<POSIXTime>,
+  last_claim: Option<POSIXTime>,
 }
 
 pub type Datum {
@@ -130,7 +130,21 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
         expect InlineDatum(new_datum) = output.datum
         expect Some(PoolDatum(new_pool_datum)) = new_datum
         // pool datum is not changed
-        new_pool_datum_active_users == new_pool_datum.active_users
+        expect new_pool_datum_active_users == new_pool_datum.active_users
+        let user_output =
+          list.find(
+            outputs,
+            fn(Output { address: addr, value: v, .. }) {
+              let (user_policy_id, user_asset_name) = asset_class
+              // check NFT and output addr
+              assets.quantity_of(v, user_policy_id, user_asset_name) == 1 && addr == own_script_addr
+            },
+          )
+        expect Some(output2) = user_output
+        expect InlineDatum(new_datum2) = output2.datum
+        expect Some(UserDatum(new_user_datum)) = new_datum2
+        // user datum is init
+        new_user_datum.user == pub_key_hash && new_user_datum.deposits == [] && new_user_datum.last_claim == None
       }
       // Validation for Unregister action when the User utxo is spent.
       // We must check that:
