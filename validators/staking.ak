@@ -115,6 +115,7 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
         expect Some(input) = main_input
         let own_script_addr = input.output.address
         expect Some(PoolDatum(pool_datum)) = datum
+        expect pairs.has_key(pool_datum.active_users, pub_key_hash) == False
         let new_pool_datum_active_users =
           list.push(pool_datum.active_users, Pair(pub_key_hash, asset_class))
         let main_output =
