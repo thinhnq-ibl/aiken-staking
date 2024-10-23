@@ -1,4 +1,5 @@
 use aiken/collection/list
+use aiken/collection/pairs
 use aiken/crypto.{VerificationKeyHash}
 use cardano/address.{Address, Script, VerificationKey}
 use cardano/assets.{AssetName, PolicyId}
@@ -13,7 +14,7 @@ type POSIXTime =
   Int
 
 pub type PoolDatumType {
-  active_users: List<Pair<VerificationKeyHash, AssetClass>>,
+  active_users: Pairs<VerificationKeyHash, AssetClass>,
 }
 
 pub type UserDatumType {
@@ -32,7 +33,7 @@ pub type Redeemer {
   DEPOSIT
   WITHDRAW
   REGISTER(VerificationKeyHash, AssetClass)
-  UNREGISTER
+  UNREGISTER(VerificationKeyHash)
   CLAIM
   COMPOUND
 }
@@ -135,7 +136,35 @@ validator staking(pool_policy_id: PolicyId, pool_asset_name: AssetName) {
       //   * the transaction is signed by pkh,
       //   * the user UTxO cannot be found in the outputs, and that
       //   * the NFT has been burnt (TBA).
-      UNREGISTER -> todo
+      UNREGISTER(pub_key_hash) -> {
+        let main_input =
+          list.find(
+            inputs,
+            fn(
+              Input { output: Output { address: pool_addr, value: v, .. }, .. },
+            ) {
+              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1
+            },
+          )
+        expect Some(input) = main_input
+        let own_script_addr = input.output.address
+        expect Some(PoolDatum(pool_datum)) = datum
+        let new_pool_datum_active_users =
+          pairs.delete_all(pool_datum.active_users, pub_key_hash)
+        let main_output =
+          list.find(
+            outputs,
+            fn(Output { address: addr, value: v, .. }) {
+              // check NFT and output addr
+              assets.quantity_of(v, pool_policy_id, pool_asset_name) == 1 && addr == own_script_addr
+            },
+          )
+        expect Some(output) = main_output
+        expect InlineDatum(new_datum) = output.datum
+        expect Some(PoolDatum(new_pool_datum)) = new_datum
+        // pool datum is not changed
+        new_pool_datum_active_users == new_pool_datum.active_users
+      }
       // Validation for Deposit action when the User utxo is spent.
       // We must check that:
       //   * the transaction is signed by the pub key specified in the user state,
